@@ -4,7 +4,10 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        System.out.println("Hello Algae core");
+        Server server = new Server();
+
+        server.connect();
+        server.start();
 
     }
 
