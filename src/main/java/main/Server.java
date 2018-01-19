@@ -1,5 +1,10 @@
 package main;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import logging.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -60,9 +65,13 @@ public class Server {
      */
     public void connect() throws IOException {
 
+        Logger.info("Waiting for client...");
+
         // Connect with the client
         client = server.accept();
         running = true;
+
+        Logger.info("Client connected");
 
         // Setup communication channels
         reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -79,8 +88,9 @@ public class Server {
 
         while (running) {
 
+            // Get data and parse into json
             String input = reader.readLine();
-            // TODO Parse input into json object
+            JsonObject data = new Gson().fromJson(input, JsonObject.class);
 
         }
 
