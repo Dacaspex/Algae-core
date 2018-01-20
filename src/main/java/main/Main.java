@@ -1,6 +1,7 @@
 package main;
 
 import logging.Logger;
+import server.Server;
 
 public class Main {
 
@@ -9,7 +10,8 @@ public class Main {
         Logger.init();
         Logger.info("Starting up server...");
 
-        Server server = new Server();
+        Server.init();
+        Server server = Server.getServer();
 
         server.connect();
         server.start();

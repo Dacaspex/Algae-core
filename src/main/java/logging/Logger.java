@@ -13,8 +13,10 @@ public class Logger {
 
     public static void init() throws IOException {
 
-        path = Paths.get("core_log.txt");
-        Files.delete(path);
+        path = Paths.get("core_log.log");
+        if (!Files.notExists(path)) {
+            Files.delete(path);
+        }
         Files.write(path, ("").getBytes(), StandardOpenOption.CREATE);
 
     }

@@ -1,9 +1,8 @@
-package main;
+package server;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import logging.Logger;
+import server.response.Response;
+import settings.SettingsParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +15,8 @@ import java.net.Socket;
  * Handles incoming requests from the client and can send data back
  */
 public class Server {
+
+    private static Server instance;
 
     /**
      * Port to run on
@@ -52,7 +53,7 @@ public class Server {
      *
      * @throws IOException if an I/O error occurs when opening the socket.
      */
-    public Server() throws IOException {
+    private Server() throws IOException {
 
         this.server = new ServerSocket(port);
 
@@ -88,12 +89,39 @@ public class Server {
 
         while (running) {
 
-            // Get data and parse into json
+            // Get and parse data
             String input = reader.readLine();
-            JsonObject data = new Gson().fromJson(input, JsonObject.class);
+
+            SettingsParser parser = new SettingsParser();
+            parser.parse(input);
 
         }
 
+    }
+
+    /**
+     * Sends a response to the client
+     *
+     * @param response Response
+     */
+    public void send(Response response) {
+        printStream.println(response.getJson());
+    }
+
+    /**
+     * Creates a new instance of the server
+     *
+     * @throws IOException If an I/O error occurs when opening the socket.
+     */
+    public static void init() throws IOException {
+        instance = new Server();
+    }
+
+    /**
+     * @return Server instance
+     */
+    public static Server getServer() {
+        return instance;
     }
 
 }
