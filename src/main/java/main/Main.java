@@ -1,7 +1,11 @@
 package main;
 
+import fractal.JuliaFractal;
 import logging.Logger;
 import server.Server;
+import util.math.Complex;
+
+import java.util.ArrayList;
 
 public class Main {
 

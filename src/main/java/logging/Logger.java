@@ -21,7 +21,7 @@ public class Logger {
 
     }
 
-    public static void info(String message) throws IOException {
+    public static void info(String message) {
 
         LocalDateTime now = LocalDateTime.now();
         String time = "[" + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "]";
@@ -31,9 +31,21 @@ public class Logger {
 
     }
 
-    private static void write(String message) throws IOException {
+    public static void info(Boolean result) {
+        info(result.toString());
+    }
 
-        Files.write(path, message.concat("\r\n").getBytes(), StandardOpenOption.APPEND);
+    private static void write(String message) {
+
+        try {
+
+            Files.write(path, message.concat("\r\n").getBytes(), StandardOpenOption.APPEND);
+
+        } catch (IOException exception) {
+
+            throw new RuntimeException("Couldn't write to log file: " + exception.getMessage());
+
+        }
 
     }
 

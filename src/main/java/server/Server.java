@@ -1,8 +1,11 @@
 package server;
 
 import logging.Logger;
+import rendering.ImageRenderer;
+import server.jobs.ImageRenderJob;
+import server.jobs.Job;
 import server.response.Response;
-import settings.SettingsParser;
+import settings.Settings;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,6 +51,8 @@ public class Server {
      */
     private PrintStream printStream;
 
+    private Job job;
+
     /**
      * Constructor
      *
@@ -92,9 +97,24 @@ public class Server {
             // Get and parse data
             String input = reader.readLine();
 
-            SettingsParser parser = new SettingsParser();
-            parser.parse(input);
+            // Parse input into settings object
+            Settings settings = new Settings(input);
+            settings.init();
 
+            switch (settings.getRequestType()) {
+
+                case IMAGE:
+                    job = new ImageRenderJob(settings);
+                    Logger.info("Starting new image render job");
+                    job.start();
+                    break;
+
+                case VIDEO:
+                default:
+                    // TODO Replace exception
+                    throw new RuntimeException("Video/other are not created yet");
+
+            }
         }
 
     }
