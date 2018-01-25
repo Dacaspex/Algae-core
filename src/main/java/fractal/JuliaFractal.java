@@ -3,6 +3,7 @@ package fractal;
 import fractal.data.JuliaFractalData;
 import fractal.settings.FractalSettings;
 import fractal.settings.JuliaFractalSettings;
+import logging.Logger;
 import settings.RenderSettings;
 import util.math.Complex;
 import util.math.Point;
@@ -19,7 +20,7 @@ public class JuliaFractal extends Fractal {
     public JuliaFractalData getFractalData(RenderSettings renderSettings) {
 
         JuliaFractalSettings fractalSettings = (JuliaFractalSettings) this.fractalSettings;
-        JuliaFractalData data = new JuliaFractalData();
+        JuliaFractalData data = new JuliaFractalData(renderSettings.getWidth(), renderSettings.getHeight());
 
         Point[][] points = fractalSettings.getScale().getPointsOnScreen(
                 renderSettings.getWidth(),
@@ -42,24 +43,22 @@ public class JuliaFractal extends Fractal {
                 );
 
                 // Save the sequence with the coordinates on the screen
-                data.addPixelData(new Point(x, y), sequence);
-
+                data.addPixelData(x, y, sequence);
             }
         }
 
-        return new JuliaFractalData();
+        return data;
     }
 
     public ArrayList<Complex> getSequence(Complex complex, Complex constant, int maxIterations, float escapeValue) {
 
         ArrayList<Complex> sequence = new ArrayList<>();
+        Complex currentValue = complex;
 
         // Perform calculation for the Julia Set
-        for (int i = 0; i < maxIterations && complex.getModulus() < escapeValue; i++) {
-
-            complex = complex.power(2).add(constant);
-            sequence.add(complex);
-
+        for (int i = 0; i < maxIterations && currentValue.getModulus() < escapeValue; i++) {
+            currentValue = currentValue.power(2).add(constant);
+            sequence.add(currentValue.clone());
         }
 
         return sequence;

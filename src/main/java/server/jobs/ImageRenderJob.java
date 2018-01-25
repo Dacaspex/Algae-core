@@ -5,7 +5,12 @@ import server.Server;
 import server.response.Response;
 import settings.Settings;
 
-public class ImageRenderJob implements Job{
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class ImageRenderJob implements Job {
 
     private Settings settings;
 
@@ -20,10 +25,20 @@ public class ImageRenderJob implements Job{
 
     @Override
     public void start() {
-        renderer.render(
+        BufferedImage image = renderer.render(
                 settings.getFractal(),
+                settings.getColorscheme(),
                 settings.getRenderSettings()
         );
+
+        File file = new File("image.png");
+
+        try {
+            ImageIO.write(image, "png", file);
+        } catch (IOException exception) {
+            // TODO Create better error handling
+            throw new RuntimeException("Could not write to image file");
+        }
 
         Server.getServer().send(new Response().addProperty("message", "done"));
     }

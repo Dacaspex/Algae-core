@@ -2,8 +2,8 @@ package util.math;
 
 public class Complex {
 
-    private final double real;
-    private final double imaginary;
+    private double real;
+    private double imaginary;
 
     public Complex(double real, double imaginary) {
         this.real = real;
@@ -18,8 +18,16 @@ public class Complex {
         return real;
     }
 
+    public void setReal(double real) {
+        this.real = real;
+    }
+
     public double getImaginary() {
         return imaginary;
+    }
+
+    public void setImaginary(double imaginary) {
+        this.imaginary = imaginary;
     }
 
     public double getModulus() {
@@ -57,44 +65,62 @@ public class Complex {
     }
 
     public Complex add(Complex c) {
-        return new Complex(
-                this.real + c.getReal(),
-                this.imaginary + c.getImaginary()
-        );
+        real += c.getReal();
+        imaginary += c.getImaginary();
+
+        return this;
     }
 
     public Complex subtract(Complex c) {
-        return new Complex(
-                this.real - c.getReal(),
-                this.imaginary - c.getImaginary()
-        );
+        real -= c.getReal();
+        imaginary -= c.getImaginary();
+
+        return this;
     }
 
     public Complex multiply(Complex complex) {
         double real = this.real * complex.getReal() - this.imaginary * complex.getImaginary();
         double imaginary = this.real * complex.getImaginary() + this.imaginary * complex.getReal();
 
-        return new Complex(real, imaginary);
+        this.real = real;
+        this.imaginary = imaginary;
+
+        return this;
     }
 
     public Complex multiply(double k) {
-        return new Complex(
-                k * real,
-                k * imaginary
-        );
+        real = k * real;
+        imaginary = k * imaginary;
+
+        return this;
+    }
+
+    public Complex square() {
+        double real = Math.pow(this.real, 2) - Math.pow(this.imaginary, 2);
+        double imaginary = 2 * this.real * this.imaginary;
+
+        this.real = real;
+        this.imaginary = imaginary;
+
+        return this;
     }
 
     public Complex power(double power) {
-        Complex result = this;
         for (int i = 0; i < power - 1; i++) {
-            result = result.multiply(result);
+            this.multiply(this);
         }
 
-        return result;
+        return this;
+    }
+
+    public Complex clone() {
+        return new Complex(getReal(), getImaginary());
     }
 
     public String toString() {
+
         String glue = "";
+
         if (imaginary >= 0) {
             glue = "+";
         }

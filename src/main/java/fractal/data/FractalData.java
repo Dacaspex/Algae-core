@@ -1,4 +1,4 @@
 package fractal.data;
 
-public interface FractalData {
+public class FractalData {
 }
