@@ -1,18 +1,24 @@
 package colorscheme;
 
+import colorscheme.data.ColorSchemeDataTypes;
 import colorscheme.data.GreyScaleData;
 import fractal.data.FractalData;
-import logging.Logger;
 import settings.RenderSettings;
-
-import java.util.Arrays;
 
 public class GreyScaleColorScheme extends ColorScheme {
 
     @Override
+    public ColorSchemeDataTypes[] getCompatibleTypes() {
+        return new ColorSchemeDataTypes[]{
+
+        };
+    }
+
+    @Override
     public ColorData getColorData(RenderSettings renderSettings, FractalData fractalData) {
 
-        float[][] greyScaleData = ((GreyScaleData) fractalData).getGreyscaleData();
+        // Get the required data
+        float[][] greyScaleData = ((GreyScaleData) fractalData).getGreyScaleData();
         ColorData colorData = new ColorData(renderSettings.getWidth(), renderSettings.getHeight());
 
         for (int x = 0; x < renderSettings.getWidth(); x++) {
@@ -27,6 +33,13 @@ public class GreyScaleColorScheme extends ColorScheme {
         return colorData;
     }
 
+    /**
+     * Maps a value between 0 and 1 to 0 and 255. This value is put into a array with size 3,
+     * mimicking a colour.
+     *
+     * @param value The normalized value between 0 and 1
+     * @return RGB colour array
+     */
     private int[] convertToColor(float value) {
         return new int[]{
                 Math.min((int) (value * 255), 255),

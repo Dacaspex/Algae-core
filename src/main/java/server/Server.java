@@ -1,16 +1,14 @@
 package server;
 
 import logging.Logger;
-import rendering.ImageRenderer;
 import server.jobs.ImageRenderJob;
 import server.jobs.Job;
 import server.response.Response;
 import settings.Settings;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,6 +17,9 @@ import java.net.Socket;
  */
 public class Server {
 
+    /**
+     * Singleton instance
+     */
     private static Server instance;
 
     /**
@@ -51,7 +52,14 @@ public class Server {
      */
     private PrintStream printStream;
 
+    /**
+     * The current job in progress
+     */
     private Job job;
+
+    private int imageNumber;
+    private final int maxImageNumber;
+    private final String outputPath;
 
     /**
      * Constructor
@@ -61,6 +69,9 @@ public class Server {
     private Server() throws IOException {
 
         this.server = new ServerSocket(port);
+        this.imageNumber = 0;
+        this.maxImageNumber = 10;
+        this.outputPath = "renders/";
 
     }
 
@@ -126,6 +137,33 @@ public class Server {
      */
     public void send(Response response) {
         printStream.println(response.getJson());
+    }
+
+    /**
+     * Saves the rendered image into the renders folder
+     *
+     * @param image The image to save to the file system
+     */
+    public void saveImage(BufferedImage image) {
+
+        File file = new File(outputPath + "image-" + imageNumber + ".png");
+
+        imageNumber = ++imageNumber % maxImageNumber;
+
+        // TODO Check if folder is present. If not, create the folder
+        // TODO For now it is assumed the folder exists
+
+        try {
+            ImageIO.write(image, "png", file);
+
+            // TODO Send response to client that the render has completed
+        } catch (IOException exception) {
+            // TODO Temporary debug message
+            send(new Response().addProperty(
+                    "debug",
+                    "Could not save image to file: " + exception.getMessage())
+            );
+        }
     }
 
     /**

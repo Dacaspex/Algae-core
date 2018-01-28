@@ -35,7 +35,7 @@ public class JuliaFractalData extends FractalData implements GreyScaleData {
     }
 
     @Override
-    public float[][] getGreyscaleData() {
+    public float[][] getGreyScaleData() {
 
         float[][] greyscaleData = new float[imageWidth][imageHeight];
 

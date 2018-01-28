@@ -3,7 +3,6 @@ package fractal;
 import fractal.data.JuliaFractalData;
 import fractal.settings.FractalSettings;
 import fractal.settings.JuliaFractalSettings;
-import logging.Logger;
 import settings.RenderSettings;
 import util.math.Complex;
 import util.math.Point;
