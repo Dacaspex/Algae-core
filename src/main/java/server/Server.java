@@ -146,7 +146,9 @@ public class Server {
      */
     public void saveImage(BufferedImage image) {
 
-        File file = new File(outputPath + "image-" + imageNumber + ".png");
+        String imageName = outputPath + "image-" + imageNumber + ".png";
+
+        File file = new File(imageName);
 
         imageNumber = ++imageNumber % maxImageNumber;
 
@@ -155,6 +157,9 @@ public class Server {
 
         try {
             ImageIO.write(image, "png", file);
+
+            // TODO Temporary fix
+            send(new Response().addProperty("image_name", imageName));
 
             // TODO Send response to client that the render has completed
         } catch (IOException exception) {
