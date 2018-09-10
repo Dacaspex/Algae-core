@@ -1,5 +1,7 @@
-# Algae-core
+# Algae-core-legacy
 The image generator of Algae
+
+**Note:** This repository is considered legacy and will not be updated. It was meant as a test.
 
 ## Installation instructions
 This project uses Maven. See the ui [installations instructions](https://github.com/Dacaspex/Algae-ui/blob/master/README.md) on how to setup the project. 
